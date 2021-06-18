@@ -18,7 +18,6 @@ import CustomContent from "esri/popup/content/CustomContent";
 import Feature from "esri/widgets/Feature";
 import FeatureLayer from "esri/layers/FeatureLayer";
 import Field from "esri/layers/support/Field";
-import moment from "moment";
 
 export default class PopupDefinition {
 
@@ -45,7 +44,7 @@ export default class PopupDefinition {
                     displayField, objectIdField, fields);
 
                 let content;
-                if(layerOrSublayer.popupTemplate.content.length) {
+                if (layerOrSublayer.popupTemplate.content.length) {
                     content = [...layerOrSublayer.popupTemplate.content, ...[customContentWidget]];
                 } else {
                     content = [customContentWidget];
@@ -65,7 +64,7 @@ export default class PopupDefinition {
     _getCustomContent(layerOrSublayer, displayField, objectIdField, fields) {
         return new CustomContent({
             outFields: ["*"],
-            creator: ({graphic}) => {
+            creator: ({ graphic }) => {
                 const widget = this.popupWidgetFactory.getWidget();
                 widget.startup();
 
@@ -75,7 +74,7 @@ export default class PopupDefinition {
                     container: vm.$refs.featureWidget
                 });
                 vm.$on('related-record-changed', (relatedRecord) => {
-                    const g =  this._getGraphic(relatedRecord);
+                    const g = this._getGraphic(relatedRecord);
                     featureWidget.graphic = g;
                 });
 
@@ -103,13 +102,13 @@ export default class PopupDefinition {
         });
         return {
             layer: layer,
-            attributes: relatedRecord.attributes,
+            attributes: Object.assign({}, relatedRecord.attributes),
             popupTemplate: {
                 //title: relatedRecord.title,
                 content: [
                     {
                         type: "fields",
-                        fieldInfos: relatedRecord.fields.map((field)=>{
+                        fieldInfos: relatedRecord.fields.map((field) => {
                             return {
                                 fieldName: field.name,
                                 label: field.alias || field.name
